@@ -1,0 +1,10 @@
+---
+title: "ggplot2_tutorial"
+author: "Raquel Baltazar"
+date: "12/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
