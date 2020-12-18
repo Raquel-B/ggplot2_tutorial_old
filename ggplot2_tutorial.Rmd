@@ -139,3 +139,30 @@ ggplot(chic, aes(x = date, y = temp)) +
         axis.title.y = element_text(vjust = 2, size = 15))
 ```
 
+the `vjust` command refers to the vertical alignment, which usually ranges between 0 and 1, *but you can also specify values outside that range*
+- vjust (which is correct form the label’s perspective)
+- but uou can also change the distance by specifying the margin of both text elements:
+
+```{r margindistance}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(axis.title.x = element_text(margin = margin(t = 10), size = 15),
+        axis.title.y = element_text(margin = margin(r = 10), size = 15))
+```
+
+The labels *t* and *r* within the margin() object refer to *top* and *right*
+- You can also specify the four margins as margin(t, r, b, l). Note that we now have to change the right margin to modify the space on the y axis, not the bottom margin.
+
+💡 A good way to remember the order of the margin sides is “t-r-oub-l-e”.
+
+## Change Aesthetics of Axis Titles
+Within the element_text() we can for example overwrite the defaults for size, color, and face:
+
+```{r element_text}
+ggplot(chic, aes(x = date, y = temp)) + 
+  geom_point(color = "firebrick") + 
+  labs(x = "Year", y = "Temperature (ºF)") + 
+  theme(axis.title = element_text(size = 15, color = "firebrick", face = "italic"))
+```
+
