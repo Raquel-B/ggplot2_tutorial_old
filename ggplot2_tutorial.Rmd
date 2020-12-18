@@ -1,10 +1,39 @@
 ---
 title: "ggplot2_tutorial"
 author: "Raquel Baltazar"
-date: "12/18/2020"
+date: "`r format(Sys.time(), '%a %d %b %Y (%H:%M:%S)')`"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+## Install CRAN packages
+```{r install_CRAN}
+install.packages(c("tidyverse", "colorspace", "corrr",  "cowplot", 
+                   "ggdark", "ggforce", "ggrepel", "ggridges", "ggsci", 
+                   "ggtext", "ggthemes", "grid", "gridExtra", "patchwork", 
+                   "rcartocolor", "scico", "showtext", "shiny", 
+                   "plotly", "highcharter", "echarts4r"))
+```
+
+## Install from GitHub since not on CRAN
+```{r install_github}
+devtools::install_github("JohnCoene/charter")
+```
+
+# Load data and assign Dataset
+
+```{r load_data}
+chic <- readr::read_csv("https://raw.githubusercontent.com/Z3tt/R-Tutorials/master/ggplot2/chicago-nmmaps.csv")
+tibble::glimpse(chic)
+```
+
+```{r head}
+head(chic,10)
+
+```
+
+
+
