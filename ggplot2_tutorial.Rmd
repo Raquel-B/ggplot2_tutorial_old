@@ -166,3 +166,14 @@ ggplot(chic, aes(x = date, y = temp)) +
   theme(axis.title = element_text(size = 15, color = "firebrick", face = "italic"))
 ```
 
+The _face_ argument can be used to make the font `bold` or `italic` or even `bold.italic`.
+
+```{r face}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(axis.title.x = element_text(color = "sienna", size = 15),
+        axis.title.y = element_text(color = "orangered", size = 15))
+```
+
+
