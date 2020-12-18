@@ -2,38 +2,140 @@
 title: "ggplot2_tutorial"
 author: "Raquel Baltazar"
 date: "`r format(Sys.time(), '%a %d %b %Y (%H:%M:%S)')`"
-output: html_document
+output:
+  html_document:
+    theme: united
+    highlight: tango
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+  word_document:
+    toc: yes
+    toc_depth: '3'
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Install CRAN packages
-```{r install_CRAN}
-install.packages(c("tidyverse", "colorspace", "corrr",  "cowplot", 
-                   "ggdark", "ggforce", "ggrepel", "ggridges", "ggsci", 
-                   "ggtext", "ggthemes", "grid", "gridExtra", "patchwork", 
-                   "rcartocolor", "scico", "showtext", "shiny", 
-                   "plotly", "highcharter", "echarts4r"))
-```
-
-## Install from GitHub since not on CRAN
-```{r install_github}
-devtools::install_github("JohnCoene/charter")
-```
+**Source**
+https://cedricscherer.netlify.app/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/
 
 # Load data and assign Dataset
 
 ```{r load_data}
 chic <- readr::read_csv("https://raw.githubusercontent.com/Z3tt/R-Tutorials/master/ggplot2/chicago-nmmaps.csv")
+
 tibble::glimpse(chic)
 ```
 
 ```{r head}
 head(chic,10)
+```
 
+# A Default ggplot
+##library(ggplot2)
+
+```{r tidyverse}
+library(tidyverse)
+```
+
+We specify the data outside aes() and add the variables that ggplot maps the aesthetics to inside aes()
+
+## 1st: We map the variable date to the x position and temp to the y position
+```{r maptemp}
+(g <- ggplot(chic, aes(x = date, y = temp)))
+```
+
+## 2nd: Now we need to provide geometry, so that ggplot knows how we want to plot that data!
+
+### geom_point() to create a scatter plot:
+```{r geompoint}
+# geom_point() to create a scatter plot:
+g + geom_point()
+```
+
+### geom_line() to create a line plot (not optimal though):
+
+```{r geomline}
+# geom_line() to create a line plot (not optimal though):
+g + geom_line()
+```
+
+### combine both:
+
+```{r geompointandline}
+# combine both:
+g + geom_line() + geom_point()
+```
+
+## 3rd: Change Properties of Geometries
+
+Within the geom_* , you can manipulate visual aesthetics such as the color, shape, and size of your points
+
+```{r geompoint_colour_shape_size}
+g + geom_point(color = "firebrick", shape = "diamond", size = 2)
+```
+Each geom comes with its own properties (called arguments) and the same argument may result in a different change depending on the geom you are using.
+
+```{r geomline_colour_shape_size}
+g + geom_point(color = "firebrick", shape = "diamond", size = 2) +
+    geom_line(color = "firebrick", linetype = "dotted", size = .3)
 ```
 
 
+## 4th: Replace the default ggplot2 theme
+
+And to illustrate some more of ggplot’s versatility, let’s get rid of the grayish default {ggplot2} look by setting a different built-in theme, e.g. theme_bw()—by calling theme_set() all following plots will have the same black’n’white theme. The red points look way better now!
+
+```{r set_theme}
+theme_set(theme_bw())
+
+g + geom_point(color = "firebrick")
+```
+
+`theme()` is an essential command to manually modify all kinds of theme elements (texts, rectangles, and lines).
+
+# Working with Axes
+
+## Change Axis Titles
+
+the labs() command provides a character string for each label we want to change (here x and y):
+
+```{r axes}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") + 
+  labs(x = "Year", y = "Temperature (ºF)")
+```
+
+**You can also add each axis title via xlab() and ylab()** Example:
+```{r axes2}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  xlab("Year") + 
+  ylab("Temperature (ºF")
+```
+
+The code below also allows to add not only symbols but e.g. superscripts:
+
+```{r axis_superscripts}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = expression(paste("Temperature (", degree ~ F, ")"^"(Hey, why should we use metric units?!)")))
+```
+
+## Increase Space between Axis and Axis Titles
+
+We can change the properties of all or particular text elements (here axis titles) by overwriting the default element_text() within the theme() call:
+
+```{r axes3}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(axis.title.x = element_text(vjust = 0, size = 15),
+        axis.title.y = element_text(vjust = 2, size = 15))
+```
 
