@@ -43,7 +43,7 @@ head(chic,10)
 library(tidyverse)
 ```
 
-We specify the data outside aes() and add the variables that ggplot maps the aesthetics to inside aes()
+We specify the data outside `aes()` and add the variables that ggplot maps the aesthetics to inside `aes()`
 
 ## 1st: We map the variable date to the x position and temp to the y position
 ```{r maptemp}
@@ -58,7 +58,7 @@ We specify the data outside aes() and add the variables that ggplot maps the aes
 g + geom_point()
 ```
 
-### geom_line() to create a line plot (not optimal though):
+### `geom_line()` to create a line plot (not optimal though):
 
 ```{r geomline}
 # geom_line() to create a line plot (not optimal though):
@@ -74,7 +74,7 @@ g + geom_line() + geom_point()
 
 ## 3rd: Change Properties of Geometries
 
-Within the geom_* , you can manipulate visual aesthetics such as the color, shape, and size of your points
+Within the `geom_*` , you can manipulate visual aesthetics such as the color, shape, and size of your points
 
 ```{r geompoint_colour_shape_size}
 g + geom_point(color = "firebrick", shape = "diamond", size = 2)
@@ -89,7 +89,7 @@ g + geom_point(color = "firebrick", shape = "diamond", size = 2) +
 
 ## 4th: Replace the default ggplot2 theme
 
-And to illustrate some more of ggplot’s versatility, let’s get rid of the grayish default {ggplot2} look by setting a different built-in theme, e.g. theme_bw()—by calling theme_set() all following plots will have the same black’n’white theme. The red points look way better now!
+And to illustrate some more of ggplot’s versatility, let’s get rid of the grayish default {ggplot2} look by setting a different built-in theme, e.g. `theme_bw()` —by calling `theme_set()` all following plots will have the same black’n’white theme. The red points look way better now!
 
 ```{r set_theme}
 theme_set(theme_bw())
@@ -103,23 +103,23 @@ g + geom_point(color = "firebrick")
 
 ## Change Axis Titles
 
-the labs() command provides a character string for each label we want to change (here x and y):
+the `labs()` command provides a character string for each label we want to change (here x and y):
 
-```{r axes}
+```{r axis}
 ggplot(chic, aes(x = date, y = temp)) +
   geom_point(color = "firebrick") + 
   labs(x = "Year", y = "Temperature (ºF)")
 ```
 
-**You can also add each axis title via xlab() and ylab()** Example:
-```{r axes2}
+** 💁 You can also add each axis title via `xlab()` and `ylab()`** Example:
+```{r axis2}
 ggplot(chic, aes(x = date, y = temp)) +
   geom_point(color = "firebrick") +
   xlab("Year") + 
   ylab("Temperature (ºF")
 ```
 
-The code below also allows to add not only symbols but e.g. superscripts:
+The code below also allows to add not only symbols but e.g. superscripts (with the use of `^`):
 
 ```{r axis_superscripts}
 ggplot(chic, aes(x = date, y = temp)) +
@@ -129,9 +129,9 @@ ggplot(chic, aes(x = date, y = temp)) +
 
 ## Increase Space between Axis and Axis Titles
 
-We can change the properties of all or particular text elements (here axis titles) by overwriting the default element_text() within the theme() call:
+We can change the properties of all or particular text elements (here axis titles) by overwriting the default `element_text()` within the `theme()` call:
 
-```{r axes3}
+```{r axis3}
 ggplot(chic, aes(x = date, y = temp)) +
   geom_point(color = "firebrick") +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -139,9 +139,11 @@ ggplot(chic, aes(x = date, y = temp)) +
         axis.title.y = element_text(vjust = 2, size = 15))
 ```
 
-the `vjust` command refers to the vertical alignment, which usually ranges between 0 and 1, *but you can also specify values outside that range*
-- vjust (which is correct form the label’s perspective)
-- but uou can also change the distance by specifying the margin of both text elements:
+the `vjust` command refers to the vertical alignment, which usually ranges between 0 and 1, **but you can also specify values outside that range**
+
+- `vjust` (which is correct form the label’s perspective)
+
+- but you can also change the distance by specifying the margin of both text elements:
 
 ```{r margindistance}
 ggplot(chic, aes(x = date, y = temp)) +
@@ -151,13 +153,14 @@ ggplot(chic, aes(x = date, y = temp)) +
         axis.title.y = element_text(margin = margin(r = 10), size = 15))
 ```
 
-The labels *t* and *r* within the margin() object refer to *top* and *right*
-- You can also specify the four margins as margin(t, r, b, l). Note that we now have to change the right margin to modify the space on the y axis, not the bottom margin.
+The labels **t** and **r** within the margin() object refer to **top** and **right**
+
+- You can also specify the four margins as margin (t, r, b, l). Note that we now have to change the right margin to modify the space on the y axis, not the bottom margin.
 
 💡 A good way to remember the order of the margin sides is “t-r-oub-l-e”.
 
 ## Change Aesthetics of Axis Titles
-Within the element_text() we can for example overwrite the defaults for size, color, and face:
+Within the e`lement_text()` we can for example overwrite the defaults for size, color, and face:
 
 ```{r element_text}
 ggplot(chic, aes(x = date, y = temp)) + 
@@ -166,7 +169,7 @@ ggplot(chic, aes(x = date, y = temp)) +
   theme(axis.title = element_text(size = 15, color = "firebrick", face = "italic"))
 ```
 
-The _face_ argument can be used to make the font `bold` or `italic` or even `bold.italic`.
+The `face` argument can be used to make the font `bold` or `italic` or even `bold.italic`.
 
 ```{r face}
 ggplot(chic, aes(x = date, y = temp)) +
