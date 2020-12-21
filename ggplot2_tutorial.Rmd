@@ -258,3 +258,8 @@ You can also use `scale_y_continuous(limits = c(0, 50))` or `coord_cartesian(yli
 knitr::include_graphics("images/axis-limit-comp-1.png")
 ```
 
+You might have spotted that on the left there is some empty buffer around your y limits while on the right points are plotted right up to the border and even beyond. This perfectly illustrates the subsetting (left) versus the zooming (right). To show why this is important let’s have a look at a different chart type, a box plot:
+
+```{r imageStart2, echo=FALSE, out.width="20%"}
+knitr::include_graphics("images/axis-limit-comp-box-1.png")
+```
