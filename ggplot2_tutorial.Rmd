@@ -179,4 +179,83 @@ ggplot(chic, aes(x = date, y = temp)) +
         axis.title.y = element_text(color = "orangered", size = 15))
 ```
 
+💁 You could also use a combination of `axis.title` and `axis.title.y`, since `axis.title.x` inherits the values from `axis.title`. Example:
+
+```{r axis.title}
+ggplot(chic, aes(x = date, y = temp)) + 
+  geom_point(color = "firebrick") + 
+  labs(x = "Year", y = "Temperature (ºF)") + 
+  theme(axis.title = element_text(color = "sienna", size = 15), 
+        axis.title.y = element_text(color = "orangered", size = 15))
+```
+
+One can modify some properties for both axis titles and other only for one or properties for each on its own:
+
+```{r modify_axis_titles}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") + 
+  labs(x = "Year", y = "Temperature (ºF)") + 
+  theme(axis.title = element_text(color = "sienna", size = 15, face = "bold"), axis.title.y = element_text(face = "bold.italic"))
+
+```
+
+## Change Aesthetics of Axis Text
+
+You can also change the appearance of the axis text (*here the numbers*) by using `axis.text`and/or the subordinated elements `axis.text.x` and `axis.text.y`:
+
+```{r modify_axis_text}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(axis.text = element_text(color = "dodgerblue", size = 12),axis.text.x = element_text(face = "italic"))
+```
+## Rotate Axis Text
+```{r rotate_axis_text}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust = 1, size = 12))
+```
+
+## Remove Axis Text & Ticks
+```{r remove_axis_text_ticks}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(axis.ticks.y = element_blank(),
+        axis.text.y = element_blank())
+```
+`element_blank()` removes the element (and thus is not considered an official element)
+
+💡 Use it if you want to get rid of a theme element
+
+## Remove Axis Titles
+
+We could again use `theme_blank()` but it is way simpler to just remove the label in the `labs()` (or `xlab()`) call:
+
+```{r remove_axis_titles}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = NULL, y = "")
+```
+💡 Note that NULL removes the element (similarly to element_blank()) while empty quotes "" will keep the spacing for the axis title and simply print nothing.
+
+## Limit Axis Range
+
+You can ZOOM IN instead of subsetting your data:
+
+```{r Zoom_limit}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  ylim(c(0, 50))
+```
+
+You can also use `scale_y_continuous(limits = c(0, 50))` or `coord_cartesian(ylim = c(0, 50)`). The former removes all data points outside the range while the second adjusts the visible area and is similar to `ylim(c(0, 50))`. 
+*You may wonder:* So in the end both result in the same. But not really, there is an important difference—compare the two following plots:
+
+```{r imageStart, echo=FALSE, out.width="20%"}
+
+knitr::include_graphics
+```
 
