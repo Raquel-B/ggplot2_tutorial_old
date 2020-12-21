@@ -263,3 +263,63 @@ You might have spotted that on the left there is some empty buffer around your y
 ```{r imageStart2, echo=FALSE, out.width="20%"}
 knitr::include_graphics("images/axis-limit-comp-box-1.png")
 ```
+*...* Because scale_x|y_continuous() subsets the data first, we get completely different (and wrong, at least if in the case this was not your aim) estimates for the box plots! I hope you don’t have to go back to your old scripts now and check if you maybe have manipulated your data while plotting and did report wrong summary stats in your report, paper or thesis…
+
+## Force Plot to Start at Origin
+
+You can also force R to plot the graph starting at the origin:
+
+```{r plot_graph_from_origin}
+
+library(tidyverse)
+
+chic_high <- dplyr::filter(chic, temp > 25, o3 > 20)
+
+ggplot(chic_high, aes(x = temp, y = o3)) +
+  geom_point(color = "darkcyan") +
+  labs(x = "Temperature higher than 25°F",
+       y = "Ozone higher than 20 ppb") +
+  expand_limits(x = 0, y = 0)
+```
+💁 Using `coord_cartesian(xlim = c(0, NA), ylim = c(0, NA))` will lead to the same result:
+
+```{r coord_cartesian}
+library(tidyverse)
+
+chic_high <- dplyr::filter(chic, temp > 25, o3 > 20)
+
+ggplot(chic_high, aes(x = temp, y = o3)) +
+  geom_point(color = "darkcyan") +
+  labs(x = "Temperature higher than 25°F",
+       y = "Ozone higher than 20 ppb") +
+  coord_cartesian(xlim = c(0, NA), ylim = c(0, NA))
+```
+
+But again, we can force it to literally start plotting from the origin
+```{r from_origin2}
+ggplot(chic_high, aes(x = temp, y = o3)) +
+  geom_point(color = "darkcyan") +
+  labs(x = "Temperature higher than 25°F",
+       y = "Ozone higher than 20 ppb") +
+  expand_limits(x = 0, y = 0) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  coord_cartesian(clip = "off")
+```
+💡 The argument clip = "off" in any coordinate system, always starting with coord_*, allows to draw outside of the panel area.
+
+## Axes with Same Scaling
+
+
+Here, let’s plot temperature against temperature with some random noise.
+
+The `coord_equal()` is a coordinate system with a specified ratio representing the number of units on the y-axis equivalent to one unit on the x-axis. The default, `ratio = 1`, ensures that one unit on the x-axis is the same length as one unit on the y-axis:
+
+```{r coord_fixed}
+ggplot(chic, aes(x = temp, y = temp + rnorm(nrow(chic), sd = 20))) +
+  geom_point(color = "sienna") +
+  labs(x = "Temperature (°F)", y = "Temperature (°F) + random noise") +
+  xlim(c(0, 100)) + ylim(c(0, 150)) +
+  coord_fixed()
+```
+
