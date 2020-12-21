@@ -255,7 +255,6 @@ You can also use `scale_y_continuous(limits = c(0, 50))` or `coord_cartesian(yli
 *You may wonder:* So in the end both result in the same. But not really, there is an important difference—compare the two following plots:
 
 ```{r imageStart, echo=FALSE, out.width="20%"}
-
-knitr::include_graphics
+knitr::include_graphics("images/axis-limit-comp-1.png")
 ```
 
