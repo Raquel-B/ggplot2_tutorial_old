@@ -310,7 +310,6 @@ ggplot(chic_high, aes(x = temp, y = o3)) +
 
 ## Axes with Same Scaling
 
-
 Here, let’s plot temperature against temperature with some random noise.
 
 The `coord_equal()` is a coordinate system with a specified ratio representing the number of units on the y-axis equivalent to one unit on the x-axis. The default, `ratio = 1`, ensures that one unit on the x-axis is the same length as one unit on the y-axis:
@@ -322,4 +321,55 @@ ggplot(chic, aes(x = temp, y = temp + rnorm(nrow(chic), sd = 20))) +
   xlim(c(0, 100)) + ylim(c(0, 150)) +
   coord_fixed()
 ```
+
+Ratios higher than one make units on the y axis longer than units on the x-axis, and vice versa:
+
+```{r higher_ratios}
+ggplot(chic, aes(x = temp, y = temp + rnorm(nrow(chic), sd = 20))) + 
+  geom_point(color = "sienna") + 
+  labs(x = "Temperature (ºF)", y = "Temperature (ºF) + random noise") + 
+  xlim(c(0,100)) + ylim(c(0, 150)) +
+  coord_fixed(ratio = 1/5)
+```
+
+## Use a Function to Alter Labels
+
+Sometimes it is handy to alter your labels a little, perhaps adding **units** or **percent signs** without adding them to your data. You can use a function in this case:
+
+```{r edit_labels}
+ggplot(chic, aes(x = date, y = temp)) + 
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = NULL)+ 
+  scale_y_continuous(label = function(x) {return(paste(x, "Degrees Fahrenheit"))})
+```
+
+
+# Working with Titles
+
+## Add a Title
+We can add a title with the `ggtitle()` function:
+```{r add_title}
+ggplot(chic, aes(x = date, y = temp)) + 
+  geom_point(color = "firebrick") + 
+  labs(x = "Year", y = "Temperature (ºF)") +
+  ggtitle("Temperatures in Chicago")
+```
+Alternatively, you can use labs(). Here you can add several arguments, e.g. additionally a subtitle, a caption and a tag (as well as axis titles as shown before):
+
+```{r add_title_subtitle_caption_tag_with_labs}
+
+ggplot(chic, aes(x = date, y = temp)) + 
+  geom_point(color = "firebrick") + 
+  labs(x = "Year", y = " Temperature (ºF)",
+       title = "Temperatures in Chicago",
+       subtitle = "Seasonal pattern of daily temperatures form 1997 to 2001",
+       caption = "Data: NMMAPS",
+       tag = "Fig.1")
+```
+
+## Make Title Bold & Add a Space at the Baseline
+
+Again, since we want to modify the properties of a theme element, we use the `theme()` function and as for the text elements `axis.title` and `axis.text` modify the font face and the margin. All the following modifications of theme elements work not only for the title but for all other labels such as `plot.subtitle`, `plot.caption`, `plot.caption`, `legend.title`, `legend.text`, and `axis.title` and `axis.text`.
+
+
 
