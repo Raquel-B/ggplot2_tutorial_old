@@ -719,7 +719,7 @@ ggplot(chic, aes( x= date, y = o3)) +
 
 The default legend for categorical variables such as `season` is a `guide_legend()` as you have seen in several previous examples. If you map a continuous variable to an aesthetic, `{ggplot2}` will by default not use `guide_legend()` but `guide_colorbar()` (or `guide_colourbar()`):
 
-```{r default_legend}
+```{r default_legend, eval=FALSE}
 ggplot(chic,
        aes(x = date, y = temp, color = temp)) +
   geom_point() +
