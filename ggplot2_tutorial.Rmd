@@ -863,4 +863,136 @@ ggplot(chic, aes(x = date, y = temp)) +
   theme(plot.background = element_rect(fill = "gray60"),
         plot.margin = unit(c(1, 3, 1, 8), "cm"))
 ```
+The order of the margin sides is top, right, bottom, left—a nice way to remember this order is **trouble** that sorts the first letter of the four sides.
+
+# Working with Multi-Panel Plots
+
+The `{ggplot2}` package has **two** nice functions for creating multi-panel plots, called `facets`. They are related but a little different: `facet_wrap` **creates essentially a ribbon of plots based on a single variable** while `facet_grid` **spans a grid of two variables.**
+
+## Create a Multi-Panel Plots Based on One Variable
+
+`facet_wrap` creates a facet of a single variable, written with a tilde in front: `facet_wrap(~ variable)`. The appearance of these subplots is controlled by the arguments `ncol` and `nrow`:
+
+```{r facet_ncol_nrow}
+g <- ggplot(chic, aes(x = date, y = temp)) +
+       geom_point(color = "chartreuse4", alpha = .3) +
+       labs(x = "Year", y = "Temperature (°F)") +
+       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+g + facet_wrap(~ year, nrow = 1)
+```
+
+Accordingly, you can arrange the plots as you like as a matrix…
+
+
+```{r arrange_plots_as_matrix}
+g + facet_wrap(~ year, nrow = 2)
+```
+
+… or even as a asymmetric grid of plots:
+
+```{r arrange_plots_as_asymetric_grid_of_plots}
+g + facet_wrap(~ year, ncol = 3) + theme(axis.title.x = element_text(hjust = .15))
+```
+
+## Allow Scales to Roam Free
+The default for multi-panel plots in `{ggplot2}` is to use equivalent scales in each panel. But sometimes you want to allow a panels own data to determine the scale. This is often not a good idea since it may give your user the wrong impression about the data. But sometimes it is indeed useful and to do this you can set `scales = "free"`:
+
+```{r free_scales}
+g + facet_wrap(~ year, nrow = 2, scales = "free")
+```
+**Note that both, x and y axes differ in their range!**
+
+## Create a Grid of Plots Based on Two Variables
+In case of two variables, `facet_grid` does the job. Here, the order of the variables determines the number of rows and columns:
+
+```{r facet_grid}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "orangered", alpha = .3) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  labs(x = "Year", y = "Temperature (°F)") +
+  facet_grid(year ~ season)
+```
+
+To change from row to column arrangement you can change `facet_grid(year ~ season)` to `facet_grid(season ~ year)`.
+
+The function `facet_wrap` can also take two variables and you are still able to control the grid design:
+
+```{r facet_wrap_two_variables}
+g + facet_wrap(year ~ season, nrow = 4, scales = "free_x")
+```
+
+## Modify Style of Strip Texts
+By using `theme`, you can modify the appearance of the strip text(i.e. the title for each facet) and the strip text boxes:
+
+```{r modify_strip_text_with_theme}
+g + facet_wrap(~ year, nrow = 1, scales = "free_x") +
+  theme(strip.text = element_text(face = "bold", color = "chartreuse4",
+                                  hjust = 0, size = 20),
+        strip.background = element_rect(fill = "chartreuse3", linetype = "dotted"))
+```
+
+The following two functions allow to highlight specific labels in combination with `element_textbox()` that is provided by `{ggtext}`.
+
+```{r highlight_specific_labels}
+library(ggtext)
+library(rlang)
+
+element_textbox_highlight <- function(..., hi.labels = NULL, hi.fill = NULL,
+                                      hi.col = NULL, hi.box.col = NULL, hi.family = NULL) {
+  structure(
+    c(element_textbox(...),
+      list(hi.labels = hi.labels, hi.fill = hi.fill, hi.col = hi.col, hi.box.col = hi.box.col, hi.family = hi.family)
+    ),
+    class = c("element_textbox_highlight", "element_textbox", "element_text", "element")
+  )
+}
+
+element_grob.element_textbox_highlight <- function(element, label = "", ...) {
+  if (label %in% element$hi.labels) {
+    element$fill <- element$hi.fill %||% element$fill
+    element$colour <- element$hi.col %||% element$colour
+    element$box.colour <- element$hi.box.col %||% element$box.colour
+    element$family <- element$hi.family %||% element$family
+  }
+  NextMethod()
+}
+```
+
+Now you can use it and specify for example all striptexts showing year:
+
+```{r striptexts_showing_year}
+g + facet_wrap(year ~ season, nrow = 4, scales = "free_x") +
+  theme(
+    strip.background = element_blank(),
+    strip.text = element_textbox_highlight(
+      family = "Playfair", size = 12, face = "bold",
+      fill = "white", box.color = "chartreuse4", color = "chartreuse4",
+      halign = .5, linetype = 1, r = unit(5, "pt"), width = unit(1, "npc"),
+      padding = margin(5, 0, 3, 0), margin = margin(0, 1, 3, 1),
+      hi.labels = c("1997", "1998", "1999", "2000"),
+      hi.fill = "chartreuse4", hi.box.col = "black", hi.col = "white"
+    )
+  )
+```
+```{r change_striptext}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(aes(color = season == "Summer"), alpha = .3) +
+  labs(x = "Year", y = "Temperature (°F)") +
+  facet_wrap(~ season, nrow = 1) +
+  scale_color_manual(values = c("gray40", "firebrick"), guide = "none") +
+  theme(
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+    strip.background = element_blank(),
+    strip.text = element_textbox_highlight(
+      size = 12, face = "bold",
+      fill = "white", box.color = "white", color = "gray40",
+      halign = .5, linetype = 1, r = unit(0, "pt"), width = unit(1, "npc"),
+      padding = margin(2, 0, 1, 0), margin = margin(0, 1, 3, 1),
+      hi.labels = "Summer", hi.family = "Bangers",
+      hi.fill = "firebrick", hi.box.col = "firebrick", hi.col = "white"
+    )
+  )
+```
+
 
