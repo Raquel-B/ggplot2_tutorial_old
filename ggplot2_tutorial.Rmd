@@ -17,9 +17,10 @@ output:
     toc_depth: '3'
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, eval=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 
 **Source**
 https://cedricscherer.netlify.app/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/
@@ -427,8 +428,7 @@ font_add_google("Bangers", "Bangers")
 
 Now, we can use those font families using: ...... `theme()`:
 
-```{r font_families}
-
+```{r eval=FALSE} 
 ggplot(chic, aes(x = date, y = temp)) +
   geom_point(color = "firebrick") +
   labs(x = "Year", y = "Temperature (°F)",
@@ -448,7 +448,7 @@ theme_set(theme_bw(base_size = 12, base_family = "Roboto Condensed"))
 
 You can use the `lineheight` argument to change the spacing between lines. In this example, I have squished the lines together (lineheight < 1).
 
-```{r change_spacing}
+```{r change_spacing, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp)) +
   geom_point(color = "firebrick") +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -463,7 +463,7 @@ Or to phrase it in a more ggplot’ish way: we map the variable `season` to the 
 
 One nice thing about `{ggplot2}` is that it adds a legend by default when mapping a variable to an aesthetic. You can see that by default the legend title is what we specified in the color argument:
 
-```{r legend_title_default}
+```{r legend_title_default, eval=FALSE}
 ggplot(chic,
        aes(x = date, y = temp, color = season)) +
   geom_point() +
@@ -476,7 +476,7 @@ Always one of the first question is: **“How can I get rid of the legend?”**.
 
 It is quite easy and always works with `theme(legend.position = "none")`:
 
-```{r remove_legend}
+```{r remove_legend, eval=FALSE}
 ggplot(chic,
        aes(x = date, y = temp, color = season)) +
   geom_point() +
@@ -486,7 +486,7 @@ ggplot(chic,
 
 You can also use `guides(color = "none")` or `scale_color_discrete(guide = "none")` depending on the specific case. While the change of the theme element removes all legends at once, you can remove particular legends with the latter options while keeping some others:
 
-```{r remove_specific_legends}
+```{r remove_specific_legends, eval=FALSE}
 ggplot(chic,
        aes(x = date, y = temp,
            color = season, shape = season)) +
@@ -500,7 +500,7 @@ Here, for example, we keep the legend for the shapes while discarding the one fo
 ## Remove Legend Titles
 
 As we already learned, use `element_blank()` to draw _nothing_:
-```{r element_blank}
+```{r element_blank, eval=FALSE}
 
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
@@ -509,14 +509,14 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 ```
 💁 You can achieve the same by setting the legend name to NULL, either via `scale_color_discrete(name = NULL)` or `labs(color = NULL)`.
 
-```{r legendtonull}
+```{r legendtonull, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
   scale_color_discrete(name = NULL)
 ```
 
-```{r legendtonull2}
+```{r legendtonull2, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -527,7 +527,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 
 If you want to place the legend not on the right, you can use `legend.position` as argument in `theme`. Possible positions are **“top”**, **“right”** (which is the default), **“bottom”**, and **“left”**.
 
-```{r change_legend.positiong_in_theme}
+```{r change_legend.positiong_in_theme, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -536,7 +536,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 
 You can also place the legend inside the panel by specifying a vector with relative x and y coordinates ranging from 0 (left or bottom) to 1 (right or top):
 
-```{r legend_inside_panel}
+```{r legend_inside_panel, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)",
@@ -551,7 +551,7 @@ Above I also overwrite the default white legend background with a transparent fi
 
 As you have seen, the legend direction is by default vertical but horizontal when you choose either the **“top”** or **“bottom”** position. But you can also switch the direction as you like:
 
-```{r legend_direction}
+```{r legend_direction, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -563,7 +563,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 ## Change Style of the Legend Title
 You can change the appearance of the legend title by adjusting the theme element `legend.title`:
 
-```{r theme_legend_title}
+```{r theme_legend_title, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -575,7 +575,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 ## Change Legend Title
 The easiest way to change the title of the legend is the `labs()` layer:
 
-```{r change_legen_in_labs}
+```{r change_legen_in_labs, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)",
@@ -587,7 +587,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 
 The legend details can be changed via `scale_color_discrete(name = "title")` or `guides(color = guide_legend("title"))`:
 
-```{r change_legend_details}
+```{r change_legend_details, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season))) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -600,7 +600,7 @@ ggplot(chic, aes(x = date, y = temp, color = season))) +
 ## Change Order of Legend Keys
 We can achieve this by changing the levels of `season`:
 
-```{r change_season_levels}
+```{r change_season_levels, eval=FALSE}
 chic$season <- 
   factor(chic$season, 
          levels = c("Winter", "Spring", "Summer", "Autumn"))
@@ -613,7 +613,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 ## Change Legend Labels
 We are going to replace the seasons by the months which they are covering by providing a vector of names in the `scale_color_discrete()` call:
 
-```{r replace_seasons_by_months}
+```{r replace_seasons_by_months, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -627,7 +627,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 ## Change Background Boxes in the Legend
 To change the background color (fill) of the legend keys, we adjust the setting for the theme element `legend.key`:
 
-```{r change_legend_key}
+```{r change_legend_key, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -643,7 +643,7 @@ If you want to get rid of them entirely use `fill = NA` or `fill = "transparent"
 ## Change Size of Legend Symbols
 Points in the legend can get a little lost with the default size, especially without the boxes. To override the default one uses again the guides layer like this:
 
-```{r no_background_color}
+```{r no_background_color, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -657,7 +657,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 ## Leave a Layer Off the Legend
 Let’s say you have two different geoms mapped to the same variable. For example, color as an aesthetic for both a point layer and a rug layer of the same data. By default, both the points and the “line” end up in the legend like this:
 
-```{r layer_off_legend}
+```{r layer_off_legend, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -666,7 +666,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 
 You can use `show.legend = FALSE` to turn off a layer in the legend:
 
-```{r turn_off_layer}
+```{r turn_off_layer, eval=FALSE}
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)") +
@@ -680,11 +680,41 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 
 Here is the default:
 
-```{r default_for_legend}
+```{r default_for_legend, eval=FALSE}
 ggplot(chic, aes(x = date, y = o3)) +
   geom_line(color = "gray") +
   geom_point(color = "darkorange2") +
   labs(x = "Year", y = "Ozone")
 ```
 
+We can force a legend by mapping a guide to a _variable._ We are mapping the lines and the points using `aes()` and we are mapping **not** to a variable in our dataset but to a single string (so that we get just one color for each).
+```{r force_legend_aes, eval=FALSE}
+ggplot(chic, aes(x = date, y = o3)) + 
+  geom_line(aes(color = "line")) + 
+  geom_point(aes(color = "points")) +
+  labs(x = "Year", y = "Ozone") +
+  scale_color_discrete("Type:")
+```
 
+Not yet what we want!
+
+We want gray and red! **To change the color**, we use `scale_color_manual()`. Additionally, we override the legend aesthetics using the `guide()` function.
+
+Voila! Now, we have a plot with gray lines and red pints as well as a single gray line and a single red point as legend symbols:
+
+```{r grey_and_red, eval=FALSE}
+ggplot(chic, aes( x= date, y = o3)) +
+  geom_line(aes(color = "line")) +
+  geom_point(aes(color = "points")) +
+  labs(x = "Year", y = "Ozone") +
+  scale_color_manual(name = NULL,
+                     guide = "legend",
+                     values = c("points" = "darkorange2", 
+                                "line" = "gray")) + 
+  guides(color = guide_legend(override.aes = list(linetype = c(1, 0),
+                                                  shape = c(NA, 16))))
+```
+
+## Use Other Legend Styles
+
+The default legend for categorical variables such as `season` is a guide_legend() as you have seen in several previous examples. If you map a continuous variable to an aesthetic, {ggplot2} will by default not use guide_legend() but guide_colorbar() (or guide_colourbar()):
