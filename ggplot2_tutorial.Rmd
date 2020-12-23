@@ -717,4 +717,150 @@ ggplot(chic, aes( x= date, y = o3)) +
 
 ## Use Other Legend Styles
 
-The default legend for categorical variables such as `season` is a guide_legend() as you have seen in several previous examples. If you map a continuous variable to an aesthetic, {ggplot2} will by default not use guide_legend() but guide_colorbar() (or guide_colourbar()):
+The default legend for categorical variables such as `season` is a `guide_legend()` as you have seen in several previous examples. If you map a continuous variable to an aesthetic, `{ggplot2}` will by default not use `guide_legend()` but `guide_colorbar()` (or `guide_colourbar()`):
+
+```{r default_legend}
+ggplot(chic,
+       aes(x = date, y = temp, color = temp)) +
+  geom_point() +
+  labs(x = "Year", y = "Temperature (°F)", color = "Temperature (°F)")
+```
+
+However, by using `guide_legend()` you can force the legend to show discrete colors for a given number of breaks as in case of a categorical variable:
+
+```{r force_legend_discrete_colors}
+ggplot(chic,
+       aes(x = date, y = temp, color = temp)) +
+  geom_point() +
+  labs(x = "Year", y = "Temperature (°F)", color = "Temperature (°F)") +
+  guides(color = guide_legend())
+
+```
+
+You can also use binned scales:
+
+```{r binned_scales}
+ggplot(chic,
+       aes(x = date, y = temp, color = temp)) +
+  geom_point() +
+  labs(x = "Year", y = "Temperature (°F)", color = "Temperature (°F)") +
+  guides(color = guide_bins())
+
+```
+
+# Working with Backgrounds & Grid Lines
+
+There are ways to change the entire look of your plot with one function (see “Working with Themes” section below) but if you want to **simply change the colors of some elements, you can also do that**.
+
+## Change Grid Lines
+
+There are two types of grid lines: major grid lines indicating the ticks and minor grid lines between the major ones. You can change all of these by overwriting the defaults for `panel.grid` or for each set of gridlines separately `panel.grid.major` and `panel.grid.minor`.
+
+```{r overwrite_defaults_panelgrid}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(panel.background = element_rect(fill = "gray90"),
+        panel.grid.major = element_line(color = "gray10", size = .5),
+        panel.grid.minor = element_line(color = "gray70", size = .25))
+```
+
+You can even specify settings for all four different levels:
+
+```{r specify_settings_all_levels}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(panel.background = element_rect(fill = "gray90"),
+        panel.grid.major = element_line(size = .5, linetype = "dashed"),
+        panel.grid.minor = element_line(size = .25, linetype = "dotted"),
+        panel.grid.major.x = element_line(color = "red1"),
+        panel.grid.major.y = element_line(color = "blue1"),
+        panel.grid.minor.x = element_line(color = "red4"),
+        panel.grid.minor.y = element_line(color = "blue4"))
+```
+
+And, of course, you can remove some or all grid lines if you like:
+
+```{r remove_all_grid}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(panel.grid.minor = element_blank())
+```
+
+
+```{r remove_more_grid}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(panel.grid = element_blank())
+```
+
+Furthermore, you can also **define the breaks between both, major and minor grid lines**:
+
+```{r define_breaks_bewteen_grid_lines}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  scale_y_continuous(breaks = seq(0, 100, 10),
+                     minor_breaks = seq(0, 100, 2.5))
+```
+
+## Change the Panel Background Color
+
+To change the background color (fill) of the panel area (i.e. the area where the data is plotted), one needs to adjust the theme element `panel.background`:
+
+```{r change_background_color_fill}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "#1D8565", size = 2) +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(panel.background = element_rect(fill = "#64D2AA",
+                                        color = "#64D2AA", size = 2))
+
+```
+
+Note that the true color—the outline of the panel background—did not change even though we specified it. This is because there is **a layer on top** of the `panel.background`, namely `panel.border`. However,  make sure to use a transparent fill here, otherwise **your data is hidden behind this layer**. In the following example, I illustrate that by using a semitransparent hex color for the `fill` argument in `element_rect`:
+
+```{r semitransparent_hex_color_for_fill}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "#1D8565", size = 2) +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(panel.border = element_rect(fill = "#64D2AA99",
+                                    color = "#64D2AA", size = 2))
+```
+
+## Change the Plot Background Color
+Similarly, to change the background color (fill) of the plot area, one needs to modify the theme element `plot.background`:
+
+```{r plot_background}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(plot.background = element_rect(fill = "gray60",
+                                       color = "gray30", size = 2))
+```
+
+You can achieve a unique background color by either setting the same colors in both `panel.background` and p`lot.background` or by setting the background filling of the panel to `"transparent"` or `NA`:
+
+```{r background_na}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(panel.background = element_rect(fill = NA),
+        plot.background = element_rect(fill = "gray60",
+                                       color = "gray30", size = 2))
+```
+# Working with Margins
+Sometimes it is useful to add a little space to the plot margin. Similar to the previous examples we can use an argument to the `theme()` function. In this case the argument is `plot.margin`. As In the previous example we already illustrated the default margin by changing the background color using `plot.background`.
+
++ Now let us add extra space to both the left and right. The argument, `plot.margin`, can handle a variety of different units (cm, inches, etc.) but it requires the use of the function unit from the package `grid` to specify the units. Here I am using a 5 cm margin on the right and left.
+
+```{r add_space_margins}
+ggplot(chic, aes(x = date, y = temp)) +
+  geom_point(color = "firebrick") +
+  labs(x = "Year", y = "Temperature (°F)") +
+  theme(plot.background = element_rect(fill = "gray60"),
+        plot.margin = unit(c(1, 3, 1, 8), "cm"))
+```
+
