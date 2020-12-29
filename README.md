@@ -1,9 +1,4 @@
----
-title: "README.md"
-author: "Raquel Baltazar"
-date: "12/29/2020"
-output: html_document
----
+# ggplot2 Tutorial - Beautiful Plotting
 
 This document is the result of following the ggplot 2 tutorial from Cedric Schrerer called "A ggplot2 tutorial for beautiful plotting in R".
 
