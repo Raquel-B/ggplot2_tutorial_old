@@ -728,14 +728,14 @@ ggplot(chic,
 
 However, by using `guide_legend()` you can force the legend to show discrete colors for a given number of breaks as in case of a categorical variable:
 
+
 ```{r force_legend_discrete_colors}
 ggplot(chic,
        aes(x = date, y = temp, color = temp)) +
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)", color = "Temperature (°F)") +
   guides(color = guide_legend())
-
-```
+``` 
 
 You can also use binned scales:
 
@@ -745,7 +745,6 @@ ggplot(chic,
   geom_point() +
   labs(x = "Year", y = "Temperature (°F)", color = "Temperature (°F)") +
   guides(color = guide_bins())
-
 ```
 
 # Working with Backgrounds & Grid Lines
